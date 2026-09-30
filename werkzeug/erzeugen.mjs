@@ -2,8 +2,8 @@
 //
 //   npm install && QUELLEN=/pfad/zu/den/klonen npm run erzeugen
 //
-// QUELLEN ist der Ordner, in dem mahjong-app, swaply, mypeak, anigosha und
-// wellbooked nebeneinander liegen (Vorgabe: der Ordner über diesem Repo).
+// QUELLEN ist der Ordner, in dem mahjong-app, swaply, mypeak, anigosha,
+// wellbooked und doppeldeutsch nebeneinander liegen (Vorgabe: der Ordner über diesem Repo).
 //
 // --- Wofür (30.09.2026) ------------------------------------------------------
 //
@@ -222,12 +222,26 @@ function swaply() {
   for (const f of ['fredoka-latin.woff2', 'nunito-latin.woff2']) copyFileSync(q('swaply', 'landing', 'fonts', f), path.join(ROOT, 'swaply', 'fonts', f));
 }
 
+function watten() {
+  const q2 = (f) => q('doppeldeutsch', 'website', f);
+  const relativ = (t) => t
+    .replace(/href="\/(datenschutz|impressum|support)\.html"/g, 'href="$1.html"')
+    .replace(/href="\/"/g, 'href="../"');
+  let d = relativ(lies(q2('datenschutz.html')));
+  d = ersetze(d, /(verwendet keine Analyse-Tools\.<\/p>)/, `$1\n<p>${esc(GITHUB_DE)}</p>`, 'watten');
+  d = ersetze(d, '<strong>Stand:</strong> 17. September 2026', `<strong>Stand:</strong> ${STAND_DE}`, 'watten');
+  schreib('watten/datenschutz.html', d);
+  schreib('watten/impressum.html', relativ(lies(q2('impressum.html'))));
+  schreib('watten/support.html', relativ(lies(q2('support.html'))));
+}
+
 // --- Lauf -------------------------------------------------------------------
 
-for (const o of ['mahjong', 'swaply', 'fullrep', 'anigosha', 'wellbooked']) rmSync(path.join(ROOT, o), { recursive: true, force: true });
+for (const o of ['mahjong', 'swaply', 'fullrep', 'anigosha', 'wellbooked', 'watten']) rmSync(path.join(ROOT, o), { recursive: true, force: true });
 
 mahjong();
 swaply();
+watten();
 
 await ausDaten({
   ordner: 'fullrep', app: 'FullRep', datei: q('mypeak', 'src', 'pages', 'legal', 'legalContent.js'),
@@ -278,6 +292,7 @@ const PFLICHT = [
   'anigosha/datenschutz.html', 'anigosha/privacy.html', 'anigosha/impressum.html', 'anigosha/imprint.html',
   'anigosha/konto-loeschen.html', 'anigosha/delete-account.html',
   'wellbooked/datenschutz.html', 'wellbooked/impressum.html', 'wellbooked/agb.html', 'wellbooked/kontakt.html',
+  'watten/datenschutz.html', 'watten/impressum.html', 'watten/support.html',
 ];
 const fehler = [];
 for (const f of PFLICHT) if (!existsSync(path.join(ROOT, f))) fehler.push(`fehlt: ${f}`);
@@ -302,7 +317,7 @@ for (const f of htmlDateien(ROOT)) {
   }
   for (const u of t.matchAll(/url\("([^"]+)"\)/g)) if (!existsSync(path.resolve(path.dirname(f), u[1]))) fehler.push(`${rel}: fehlende Datei ${u[1]}`);
 }
-for (const f of ['mahjong/datenschutz.html', 'swaply/datenschutz.html', 'fullrep/datenschutz.html', 'fullrep/privacy.html', 'anigosha/datenschutz.html', 'anigosha/privacy.html', 'wellbooked/datenschutz.html']) {
+for (const f of ['mahjong/datenschutz.html', 'swaply/datenschutz.html', 'fullrep/datenschutz.html', 'fullrep/privacy.html', 'anigosha/datenschutz.html', 'anigosha/privacy.html', 'wellbooked/datenschutz.html', 'watten/datenschutz.html']) {
   if (existsSync(path.join(ROOT, f)) && !readFileSync(path.join(ROOT, f), 'utf8').includes('GitHub, Inc.')) fehler.push(`${f}: GitHub-Hinweis fehlt`);
 }
 if (fehler.length) {
