@@ -1,0 +1,13 @@
+{
+  "name": "almaz6380.github.io",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "erzeugen": "node werkzeug/erzeugen.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

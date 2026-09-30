@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Impressum – Swaply</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#06171c" />
+<link rel="icon" type="image/png" href="icon.png" />
+<style>
+  @font-face {
+    font-family: "Fredoka"; font-style: normal; font-weight: 300 700; font-display: swap;
+    src: url("fonts/fredoka-latin.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Nunito"; font-style: normal; font-weight: 200 1000; font-display: swap;
+    src: url("fonts/nunito-latin.woff2") format("woff2");
+  }
+  /* Gleiche Farben wie Start- und Bio-Seite: Ein Sprung von dunkel auf weiss beim
+     Klick auf "Datenschutz" wirkt wie eine fremde Seite. */
+  :root {
+    --paper: #06171c; --ink: #eefaf7; --ink-soft: #cfe6e4; --dim: #9dbcbb;
+    --line: rgba(255, 255, 255, 0.14); --blue: #4e8cfe; --green: #3ece8e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Nunito", system-ui, -apple-system, sans-serif; font-weight: 600; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 40px 22px 70px; }
+  a.back {
+    display: inline-flex; align-items: center; gap: 6px; color: var(--blue);
+    text-decoration: none; font-weight: 800; font-size: 0.95rem; margin-bottom: 26px;
+  }
+  h1 { font-family: "Fredoka", sans-serif; font-weight: 700; font-size: 2.1rem; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .updated { color: var(--dim); font-size: 0.88rem; margin-bottom: 28px; }
+  h2 { font-family: "Fredoka", sans-serif; font-weight: 600; font-size: 1.2rem; margin: 30px 0 8px; }
+  p, li { color: var(--ink-soft); font-size: 0.98rem; margin: 0 0 10px; }
+  ul { padding-left: 20px; margin: 0 0 10px; }
+  li { margin-bottom: 6px; }
+  a { color: var(--blue); }
+  hr { border: none; border-top: 1px solid var(--line); margin: 34px 0; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Impressum</h1>
+    <div class="updated">Stand: Juli 2026</div>
+
+    <p>
+      Informationspflicht laut § 5 E-Commerce-Gesetz (ECG) und Offenlegungspflicht gemäß
+      § 25 Mediengesetz. Für Nutzer:innen in Deutschland gelten dieselben Angaben zugleich als
+      Anbieterkennzeichnung nach § 5 Digitale-Dienste-Gesetz (DDG); Swaply wird von einem in
+      Österreich niedergelassenen Unternehmen betrieben.
+    </p>
+
+    <h2>Medieninhaber und Betreiber</h2>
+    <p>
+      Josef Gallab<br />
+      Einzelunternehmen<br />
+      Oberhofenweg 21b<br />
+      6380 St. Johann in Tirol, Österreich
+    </p>
+
+    <h2>Kontakt</h2>
+    <p>E-Mail: <a href="mailto:kontakt@wellbooked.at">kontakt@wellbooked.at</a></p>
+
+    <h2>Unternehmensgegenstand</h2>
+    <p>Entwicklung und Betrieb von Software-Anwendungen (Apps) und zugehörigen Websites.</p>
+
+    <h2>Gewerbe und berufsrechtliche Angaben</h2>
+    <ul>
+      <li>Freies Gewerbe: „Dienstleistungen in der automatischen Datenverarbeitung und Informationstechnik"</li>
+      <li>GISA-Zahl: 39801937</li>
+      <li>Mitglied der Wirtschaftskammer Tirol (Bezirksstelle Kitzbühel)</li>
+      <li>Aufsichtsbehörde / Gewerbebehörde: Bezirkshauptmannschaft Kitzbühel</li>
+      <li>Anwendbare Rechtsvorschrift: Gewerbeordnung (GewO), abrufbar unter ris.bka.gv.at</li>
+      <li>Umsatzsteuer: Kleinunternehmer gemäß § 6 Abs. 1 Z 27 UStG (keine UID-Nummer, kein Steuerausweis)</li>
+    </ul>
+
+    <h2>Online-Streitbeilegung</h2>
+    <p>
+      Die frühere EU-Plattform zur Online-Streitbeilegung wurde am 20. Juli 2025 eingestellt.
+      Unsere E-Mail-Adresse findest du oben. Wir sind nicht verpflichtet und grundsätzlich nicht
+      bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle
+      teilzunehmen.
+    </p>
+
+    <h2>Haftung für Inhalte</h2>
+    <p>
+      Die Inhalte dieser Website und der App wurden mit größter Sorgfalt erstellt. Swaply
+      unterstützt beim Aufbau gesünderer Gewohnheiten und ersetzt keine medizinische,
+      psychologische oder therapeutische Beratung oder Behandlung. Bei gesundheitlichen
+      Problemen wende dich bitte an qualifiziertes Fachpersonal.
+    </p>
+
+    <hr />
+    <p><a href="datenschutz.html">Datenschutzerklärung</a></p>
+  </div>
+</body>
+</html>
