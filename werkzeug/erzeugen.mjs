@@ -315,7 +315,7 @@ await ausDaten({
       { key: 'terms', datei: { de: 'nutzungsbedingungen', en: 'terms' } },
       { key: 'deletion', datei: { de: 'daten-loeschen', en: 'delete-data' } },
     ],
-    anker: { de: 'Vercel:', en: 'Vercel:' },
+    anker: { de: 'Cloudflare (', en: 'Cloudflare (' },
     stand: (_doc, lang, neu) => `${lang === 'de' ? 'Stand' : 'Last updated'}: ${neu ? '30.09.2026' : STAND}`,
   });
 }
