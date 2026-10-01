@@ -3,7 +3,8 @@
 //   npm install && QUELLEN=/pfad/zu/den/klonen npm run erzeugen
 //
 // QUELLEN ist der Ordner, in dem mahjong-app, swaply, mypeak, anigosha,
-// wellbooked und doppeldeutsch nebeneinander liegen (Vorgabe: der Ordner über diesem Repo).
+// fixthemix, wellbooked und doppeldeutsch nebeneinander liegen (Vorgabe: der
+// Ordner über diesem Repo).
 //
 // --- Wofür (30.09.2026) ------------------------------------------------------
 //
@@ -114,11 +115,13 @@ function mitGithub(sections, anker, zusatz, wo) {
   return sections.map((x) => (x === s ? { ...x, body: teile.join('\n\n') } : x));
 }
 
-// --- FullRep und Anigosha: Texte liegen als Datenobjekt vor ------------------
+// --- FullRep, Anigosha und FixTheMix: Texte liegen als Datenobjekt vor ------
+//
+// Erwartet { [key]: { de|en: { title, updated?, sections: [{ heading, body }] } } }
+// — entweder als Export `legalDocs` aus `datei` oder fertig übergeben als `alle`.
 
-async function ausDaten({ ordner, app, datei, docs, anker, stand }) {
-  const mod = await import(pathToFileURL(datei).href);
-  const alle = mod.legalDocs;
+async function ausDaten({ ordner, app, datei, alle: vorgabe, docs, anker, stand }) {
+  const alle = vorgabe ?? (await import(pathToFileURL(datei).href)).legalDocs;
   for (const lang of ['de', 'en']) {
     const links = docs.map((d) => ({ href: `${d.datei[lang]}.html`, label: alle[d.key][lang].title }));
     for (const d of docs) {
@@ -237,7 +240,7 @@ function watten() {
 
 // --- Lauf -------------------------------------------------------------------
 
-for (const o of ['mahjong', 'swaply', 'fullrep', 'anigosha', 'wellbooked', 'watten']) rmSync(path.join(ROOT, o), { recursive: true, force: true });
+for (const o of ['mahjong', 'swaply', 'fullrep', 'anigosha', 'fixthemix', 'wellbooked', 'watten']) rmSync(path.join(ROOT, o), { recursive: true, force: true });
 
 mahjong();
 swaply();
@@ -276,6 +279,47 @@ await ausDaten({
   });
 }
 
+// FixTheMix: TypeScript wie Anigosha, aber mit deutschen Schlüsseln
+// (rechtsTexte → titel/abschnitte → titel/text). Wird hier auf die Form von
+// legalDocs umgeschrieben; die Schlüssel werden dabei die von Anigosha, damit
+// die Datenschutzerklärung als 'privacy' den GitHub-Absatz bekommt.
+{
+  const src = q('fixthemix', 'src', 'pages', 'legal', 'legalContent.ts');
+  mkdirSync(TMP, { recursive: true });
+  const js = path.join(TMP, 'fixthemix-legal.mjs');
+  const esbuild = await import('esbuild');
+  await esbuild.build({ entryPoints: [src], outfile: js, format: 'esm', platform: 'node', logLevel: 'error' });
+  const { rechtsTexte, STAND } = await import(pathToFileURL(js).href);
+  const SCHLUESSEL = { impressum: 'imprint', datenschutz: 'privacy', nutzung: 'terms', loeschen: 'deletion' };
+  const alle = {};
+  for (const [alt, neu] of Object.entries(SCHLUESSEL)) {
+    alle[neu] = {};
+    for (const lang of ['de', 'en']) {
+      const t = rechtsTexte[alt][lang];
+      let sections = t.abschnitte.map((a) => ({ heading: a.titel, body: a.text }));
+      // Die Erklärung nennt ihren Stand auch im Text; der muss zum Kopf passen.
+      if (neu === 'privacy') {
+        const alt2 = lang === 'de' ? `Stand dieser Erklärung: ${STAND}.` : `Last updated: ${STAND}.`;
+        const neu2 = lang === 'de' ? 'Stand dieser Erklärung: 30.09.2026.' : 'Last updated: 30.09.2026.';
+        sections = sections.map((x) => ({ ...x, body: x.body.includes(alt2) ? ersetze(x.body, alt2, neu2, `fixthemix ${lang}`) : x.body }));
+        if (!sections.some((x) => x.body.includes(neu2))) throw new Error(`fixthemix ${lang}: Stand im Text nicht gefunden`);
+      }
+      alle[neu][lang] = { title: t.titel, sections };
+    }
+  }
+  await ausDaten({
+    ordner: 'fixthemix', app: 'FixTheMix', alle,
+    docs: [
+      { key: 'privacy', datei: { de: 'datenschutz', en: 'privacy' } },
+      { key: 'imprint', datei: { de: 'impressum', en: 'imprint' } },
+      { key: 'terms', datei: { de: 'nutzungsbedingungen', en: 'terms' } },
+      { key: 'deletion', datei: { de: 'daten-loeschen', en: 'delete-data' } },
+    ],
+    anker: { de: 'Vercel:', en: 'Vercel:' },
+    stand: (_doc, lang, neu) => `${lang === 'de' ? 'Stand' : 'Last updated'}: ${neu ? '30.09.2026' : STAND}`,
+  });
+}
+
 await wellbooked();
 
 writeFileSync(path.join(ROOT, 'app-ads.txt'), APP_ADS);
@@ -291,6 +335,8 @@ const PFLICHT = [
   'fullrep/datenschutz.html', 'fullrep/privacy.html', 'fullrep/impressum.html', 'fullrep/imprint.html',
   'anigosha/datenschutz.html', 'anigosha/privacy.html', 'anigosha/impressum.html', 'anigosha/imprint.html',
   'anigosha/konto-loeschen.html', 'anigosha/delete-account.html',
+  'fixthemix/datenschutz.html', 'fixthemix/privacy.html', 'fixthemix/impressum.html', 'fixthemix/imprint.html',
+  'fixthemix/nutzungsbedingungen.html', 'fixthemix/terms.html', 'fixthemix/daten-loeschen.html', 'fixthemix/delete-data.html',
   'wellbooked/datenschutz.html', 'wellbooked/impressum.html', 'wellbooked/agb.html', 'wellbooked/kontakt.html',
   'watten/datenschutz.html', 'watten/impressum.html', 'watten/support.html',
 ];
@@ -317,7 +363,7 @@ for (const f of htmlDateien(ROOT)) {
   }
   for (const u of t.matchAll(/url\("([^"]+)"\)/g)) if (!existsSync(path.resolve(path.dirname(f), u[1]))) fehler.push(`${rel}: fehlende Datei ${u[1]}`);
 }
-for (const f of ['mahjong/datenschutz.html', 'swaply/datenschutz.html', 'fullrep/datenschutz.html', 'fullrep/privacy.html', 'anigosha/datenschutz.html', 'anigosha/privacy.html', 'wellbooked/datenschutz.html', 'watten/datenschutz.html']) {
+for (const f of ['mahjong/datenschutz.html', 'swaply/datenschutz.html', 'fullrep/datenschutz.html', 'fullrep/privacy.html', 'anigosha/datenschutz.html', 'anigosha/privacy.html', 'fixthemix/datenschutz.html', 'fixthemix/privacy.html', 'wellbooked/datenschutz.html', 'watten/datenschutz.html']) {
   if (existsSync(path.join(ROOT, f)) && !readFileSync(path.join(ROOT, f), 'utf8').includes('GitHub, Inc.')) fehler.push(`${f}: GitHub-Hinweis fehlt`);
 }
 if (fehler.length) {

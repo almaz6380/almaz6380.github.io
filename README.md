@@ -16,7 +16,7 @@ Die Texte werden weiter in den App-Repos gepflegt. Nach jeder Änderung an einem
 
 ```bash
 npm install
-QUELLEN=/ordner/mit/den/app-klonen npm run erzeugen   # mahjong-app, swaply, mypeak, anigosha, wellbooked, doppeldeutsch
+QUELLEN=/ordner/mit/den/app-klonen npm run erzeugen   # mahjong-app, swaply, mypeak, anigosha, fixthemix, wellbooked, doppeldeutsch
 git add -A && git commit && git push
 ```
 
@@ -31,6 +31,7 @@ Das Skript `werkzeug/erzeugen.mjs` bricht ab, wenn:
 | Swaply | `swaply/landing/{datenschutz,impressum}.html` |
 | FullRep | `mypeak/src/pages/legal/legalContent.js` |
 | Anigosha | `anigosha/src/pages/legal/legalContent.ts` |
+| FixTheMix | `fixthemix/src/pages/legal/legalContent.ts` |
 | WELLbooked | `wellbooked/src/app/(customer)/{datenschutz,impressum,agb,kontakt}/page.tsx` |
 | Watten & Schnapsen | `doppeldeutsch/website/{datenschutz,impressum,support}.html` |
 
