@@ -25,7 +25,7 @@ footer a{margin-right:1rem;display:inline-block}</style>
 <a class="sprache" href="datenschutz.html" hreflang="de">Deutsch</a>
 <p class="app">FullRep</p>
 <h1>Privacy Policy</h1>
-<p class="stand">Last updated: 30 September 2026</p>
+<p class="stand">Last updated: 4 October 2026</p>
 <section>
 <h2>1. Controller</h2>
 <p>The controller responsible for data processing in the &quot;FullRep&quot; app is:</p>
@@ -39,7 +39,7 @@ Email: <a href="mailto:kontakt@wellbooked.at">kontakt@wellbooked.at</a></p>
 <p>Account data: email address and password (encrypted) for registration.</p>
 <p>Profile data: name, age, gender, height, weight, training goal, activity level and experience — provided by you during onboarding.</p>
 <p>Usage data: your workouts (exercises, sets, weights), nutrition entries (foods, calories, macros), water intake, supplements, weight history, training plans, friendships and experience points.</p>
-<p>Health data (Art. 9 GDPR): body weight and body measurements, nutrition and training data, cycle data and symptom diary (if you enable cycle tracking), steps and weight from Apple Health / Health Connect (if you enable the connection), and everything you write to the AI coach — for example blood values. We process this data exclusively on the basis of your explicit consent, which you give in a separate step during onboarding (we record the time in your profile) and can withdraw at any time by deleting your account.</p>
+<p>Health data (Art. 9 GDPR): body weight and body measurements, nutrition and training data, cycle data and symptom diary (if you enable cycle tracking), steps and weight from Apple Health / Health Connect (if you enable the connection), and everything you write to the AI coach — for example blood values. We process this data exclusively on the basis of your explicit consent, which you give in a separate step during onboarding (we record the time in your profile) and can withdraw at any time with effect for the future — in your profile via &quot;Withdraw consent to health data&quot; or by deleting your account. Processing carried out before the withdrawal remains lawful. Because FullRep cannot work meaningfully without this data, after withdrawing you can only keep using your account once you consent again, or you can have it deleted.</p>
 <p>Apple Health / Health Connect (optional): If you enable the connection in your profile, FullRep reads step count and weight from Apple Health (iOS) or Google Health Connect (Android) to display them in the app and add them to your weight history. You grant access in the system dialog and can revoke it there at any time; you can also switch the connection off in your profile. FullRep does not write any data to Apple Health or Health Connect and never uses this data for advertising.</p>
 <p>Photos: exercise and product photos are stored exclusively on your device (IndexedDB) and are not transmitted to us. Meal photos for AI analysis are transmitted to Google (Gemini API) — see section 4.</p>
 <p>Advertising and purchase data (iOS and Android apps only): To display ads, Google AdMob processes your device's advertising ID, your IP address and technical device information. For the Premium subscription we transmit an app-internal user identifier and the store's purchase receipt to RevenueCat. The web app shows no ads.</p>
@@ -51,23 +51,24 @@ Email: <a href="mailto:kontakt@wellbooked.at">kontakt@wellbooked.at</a></p>
 <p>Health data: exclusively your explicit consent, Art. 9(2)(a) GDPR.</p>
 <p>Advertising in the apps: We show personalised ads only with your consent (Art. 6(1)(a) GDPR), which we obtain before the first ad via Google's consent dialog — on iOS additionally via Apple's App Tracking Transparency prompt. If you decline, you only see non-personalised ads; the legal basis for those is our legitimate interest in financing the free version (Art. 6(1)(f) GDPR). You can change your decision at any time in your profile under &quot;Change ad consent&quot;. With a Premium subscription, ads are removed entirely. Your health and usage data is never used for advertising or shared with advertising partners.</p>
 <p>Crash reports and security: legitimate interest in a stable and secure app (Art. 6(1)(f) GDPR).</p>
+<p>Minimum age: an account can only be created from the age of 16; onboarding checks the date of birth. The reason is that consent to the processing of health data and to personalised advertising can only be given validly from the age of 16 in some EU countries, such as Germany (Art. 8 GDPR).</p>
 <p>The web app shows no ads and uses neither advertising cookies nor analytics tools.</p>
 </section>
 <section>
 <h2>4. Recipients and processors</h2>
 <p>Supabase, Inc. (USA; database and login system): stores your account, profile and usage data.</p>
-<p>Vercel, Inc. (USA; hosting and visitor counting): delivers the app and our server functions; technically necessary server logs (e.g. IP address) are generated. On the web version at fullrep.vercel.app, Vercel Web Analytics additionally counts page views, referrer, country, device type and browser so that we can see which pages are used — without cookies and without a cross-device identifier; the legal basis is Art. 6(1)(f) GDPR. This counting does not take place in the iOS and Android apps.</p>
+<p>Cloudflare, Inc. (USA; hosting): delivers the app and our server functions; technically necessary server logs (e.g. IP address) are generated. No visitor counting or analytics takes place, neither on the web version nor in the apps.</p>
 <p>GitHub, Inc. (USA), a Microsoft Corporation company: delivery of these legal texts via GitHub Pages (almaz6380.github.io). Technically necessary server logs (IP address, time, requested page, user agent) are generated. The legal basis is our legitimate interest in secure delivery (Art. 6(1)(f) GDPR), safeguarded by EU standard contractual clauses. We do not analyse these logs ourselves.</p>
-<p>Google LLC / Google Ireland Ltd.: (1) Gemini API — only if you use the meal photo analysis, the captured photo is transmitted to Google for evaluation; only if you use the AI coach, your messages to it, including the history of the current conversation, go to Google. We do not send your name, email address or account ID; photos and messages are not stored on our servers. (2) AdMob — advertising in the iOS and Android apps (see sections 2 and 3).</p>
-<p>Anthropic, PBC (USA; AI coach): For AI coach answers we use Anthropic models as an alternative to Gemini — with the same data as above, likewise without name, email or account ID.</p>
+<p>Google LLC / Google Ireland Ltd.: (1) Gemini API — only if you use the meal photo analysis, the captured photo is transmitted to Google for evaluation; only if you use the AI coach, your messages to it, including the history of the current conversation, are processed by Google (Gemini API) to generate the answer. Google processes these inputs under its terms for the Gemini API. We do not send your name, email address or account ID; photos and messages are not stored on our servers. (2) AdMob — advertising in the iOS and Android apps (see sections 2 and 3).</p>
+<p>Anthropic, PBC (USA; AI coach): AI coach answers may also be generated by Anthropic models (Claude) instead of Gemini. In that case Anthropic processes your messages, including the history of the current conversation — likewise without name, email or account ID.</p>
 <p>RevenueCat, Inc. (USA; Premium subscription): receives an app-internal user identifier and the store's purchase confirmation to manage your subscription and restore it on a new device. Payment itself is handled by Apple or Google; we never see payment details.</p>
 <p>Functional Software, Inc. (Sentry, USA; crash reports): receives technical error messages without personal reference, if error reporting is enabled.</p>
 <p>Open Food Facts (food database): when searching for foods or scanning barcodes, the search term or barcode (no personal data) is transmitted to Open Food Facts.</p>
-<p>Data processing agreements under Art. 28 GDPR are in place with all processors. For transfers to the USA we rely on the EU standard contractual clauses or the EU-US Data Privacy Framework where the provider is certified.</p>
+<p>Where providers offer data processing terms under Art. 28 GDPR, these apply to our use of their services. For transfers to the USA we rely on the EU standard contractual clauses or the EU-US Data Privacy Framework where the provider is certified.</p>
 </section>
 <section>
 <h2>5. Local storage on your device</h2>
-<p>The app additionally stores your data locally on your device (localStorage/IndexedDB) so it is available offline and without delay. In guest mode, all data remains exclusively on your device and is not transmitted to us.</p>
+<p>The app additionally stores your data locally on your device (localStorage/IndexedDB) so it is available offline and without delay. In guest mode, all data remains exclusively on your device and is not transmitted to us. In the Android app, automatic backup via Google (Android backup) is switched off, so your local app data does not end up in your Google Drive backup.</p>
 </section>
 <section>
 <h2>6. Storage period</h2>
@@ -80,7 +81,7 @@ Email: <a href="mailto:kontakt@wellbooked.at">kontakt@wellbooked.at</a></p>
 </section>
 <section>
 <h2>8. Your rights</h2>
-<p>You have the right to access, rectification, erasure, restriction of processing, data portability and objection, as well as the right to withdraw consent at any time. You can also lodge a complaint with the Austrian Data Protection Authority (dsb.gv.at).</p>
+<p>You have the right to access, rectification, erasure, restriction of processing, data portability and objection, as well as the right to withdraw consent at any time — consent to health data in your profile under &quot;Withdraw consent to health data&quot;, ad consent under &quot;Change ad consent&quot;. You can also lodge a complaint with the Austrian Data Protection Authority (dsb.gv.at).</p>
 </section>
 <footer><a href="privacy.html">Privacy Policy</a><a href="imprint.html">Legal Notice</a><a href="terms.html">Terms of Use</a><a href="health.html">Health Notice</a></footer>
 </main>

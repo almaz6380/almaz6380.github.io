@@ -29,8 +29,10 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const QUELLEN = path.resolve(process.env.QUELLEN ?? path.join(ROOT, '..'));
 const TMP = path.join(ROOT, 'werkzeug', '.tmp');
 
-const STAND_DE = '30. September 2026';
-const STAND_EN = '30 September 2026';
+// Stand der veröffentlichten Fassungen (Original + GitHub-Ergänzung).
+const STAND_DE = '4. Oktober 2026';
+const STAND_EN = '4 October 2026';
+const STAND_KURZ = '04.10.2026';
 const APP_ADS = 'google.com, pub-8860791993288062, DIRECT, f08c47fec0942fa0\n';
 
 const GITHUB_DE =
@@ -194,17 +196,26 @@ async function wellbooked() {
 function mahjong() {
   let p = lies(q('mahjong-app', 'public', 'privacy.html'));
   let i = lies(q('mahjong-app', 'public', 'impressum.html'));
-  const ohneVercel = (t, wo) => ersetze(t, /\n[ \t]*<!-- Vercel Web Analytics[^\n]*-->\n[ \t]*<script defer src="\/_vercel\/insights\/script\.js"><\/script>/, '', wo);
+  let t = lies(q('mahjong-app', 'public', 'terms.html'));
+  const ohneVercel = (x, wo) => ersetze(x, /\n[ \t]*<!-- Vercel Web Analytics[^\n]*-->\n[ \t]*<script defer src="\/_vercel\/insights\/script\.js"><\/script>/, '', wo);
   p = ohneVercel(p, 'mahjong privacy');
   i = ohneVercel(i, 'mahjong impressum');
-  p = p.replace(/href="\/impressum\.html"/g, 'href="impressum.html"');
-  i = i.replace(/href="\/privacy\.html"/g, 'href="datenschutz.html"');
+  t = ohneVercel(t, 'mahjong terms');
+  // Im Original heißen die Seiten privacy/terms.html, hier datenschutz/nutzungsbedingungen.html.
+  const relativ = (x) => x
+    .replace(/href="\/impressum\.html"/g, 'href="impressum.html"')
+    .replace(/href="\/privacy\.html"/g, 'href="datenschutz.html"')
+    .replace(/href="\/terms\.html"/g, 'href="nutzungsbedingungen.html"');
+  p = relativ(p);
+  i = relativ(i);
+  t = relativ(t);
   p = ersetze(p, 'rufen unsere Webseite nicht auf.</p>', `rufen unsere Webseite nicht auf.</p>\n  <p>${esc(GITHUB_DE)}</p>`, 'mahjong de');
   p = ersetze(p, 'do not call our website.</p>', `do not call our website.</p>\n  <p>${esc(GITHUB_EN)}</p>`, 'mahjong en');
-  p = ersetze(p, 'Stand: 17. September 2026', `Stand: ${STAND_DE}`, 'mahjong de');
-  p = ersetze(p, 'Last updated: September 17, 2026', 'Last updated: September 30, 2026', 'mahjong en');
+  p = ersetze(p, /Stand: \d+\. \w+ 2026/, `Stand: ${STAND_DE}`, 'mahjong de');
+  p = ersetze(p, /Last updated: \w+ \d+, 2026/, 'Last updated: October 4, 2026', 'mahjong en');
   schreib('mahjong/datenschutz.html', p);
   schreib('mahjong/impressum.html', i);
+  schreib('mahjong/nutzungsbedingungen.html', t);
 }
 
 function swaply() {
@@ -216,13 +227,16 @@ function swaply() {
   i = ohneZurueck(i, 'swaply impressum');
   d = ersetze(d, 'href="impressum"', 'href="impressum.html"', 'swaply datenschutz');
   i = ersetze(i, 'href="datenschutz"', 'href="datenschutz.html"', 'swaply impressum');
-  d = ersetze(d, /(EU-Standardvertragsklauseln\.\n[ \t]*<\/li>)/, `$1\n      <li><strong>Hosting dieser Rechtstexte (GitHub):</strong> ${esc(GITHUB_DE)}</li>`, 'swaply');
-  d = ersetze(d, 'Stand: 17. September 2026', `Stand: ${STAND_DE}`, 'swaply');
+  // Seit 04.10.2026 nennt das Original GitHub selbst; nur einfügen, falls es fehlt.
+  if (!d.includes('GitHub, Inc.')) {
+    d = ersetze(d, /(EU-Standardvertragsklauseln\.\n[ \t]*<\/li>)/, `$1\n      <li><strong>Hosting dieser Rechtstexte (GitHub):</strong> ${esc(GITHUB_DE)}</li>`, 'swaply');
+    d = ersetze(d, /Stand: \d+\. \w+ 2026/, `Stand: ${STAND_DE}`, 'swaply');
+  }
   schreib('swaply/datenschutz.html', d);
   schreib('swaply/impressum.html', i);
   copyFileSync(q('swaply', 'landing', 'icon.png'), path.join(ROOT, 'swaply', 'icon.png'));
   mkdirSync(path.join(ROOT, 'swaply', 'fonts'), { recursive: true });
-  for (const f of ['fredoka-latin.woff2', 'nunito-latin.woff2']) copyFileSync(q('swaply', 'landing', 'fonts', f), path.join(ROOT, 'swaply', 'fonts', f));
+  for (const f of ['fredoka-latin.woff2', 'nunito-latin.woff2', 'OFL.txt']) copyFileSync(q('swaply', 'landing', 'fonts', f), path.join(ROOT, 'swaply', 'fonts', f));
 }
 
 function watten() {
@@ -231,16 +245,25 @@ function watten() {
     .replace(/href="\/(datenschutz|impressum|support)\.html"/g, 'href="$1.html"')
     .replace(/href="\/"/g, 'href="../"');
   let d = relativ(lies(q2('datenschutz.html')));
-  d = ersetze(d, /(verwendet keine Analyse-Tools\.<\/p>)/, `$1\n<p>${esc(GITHUB_DE)}</p>`, 'watten');
-  d = ersetze(d, '<strong>Stand:</strong> 17. September 2026', `<strong>Stand:</strong> ${STAND_DE}`, 'watten');
+  // Seit 04.10.2026 nennt das Original GitHub Pages selbst; nur einfügen, falls es fehlt.
+  if (!d.includes('GitHub, Inc.')) {
+    d = ersetze(d, /(verwendet keine Analyse-Tools\.<\/p>)/, `$1\n<p>${esc(GITHUB_DE)}</p>`, 'watten');
+    d = ersetze(d, /<strong>Stand:<\/strong> \d+\. \w+ 2026/, `<strong>Stand:</strong> ${STAND_DE}`, 'watten');
+  }
   schreib('watten/datenschutz.html', d);
+  // Die Seiten verweisen auf index.html (Startseite der App-Website).
+  schreib('watten/index.html', relativ(lies(q2('index.html'))));
   schreib('watten/impressum.html', relativ(lies(q2('impressum.html'))));
   schreib('watten/support.html', relativ(lies(q2('support.html'))));
 }
 
 // --- Lauf -------------------------------------------------------------------
 
-for (const o of ['mahjong', 'swaply', 'fullrep', 'anigosha', 'fixthemix', 'wellbooked', 'watten']) rmSync(path.join(ROOT, o), { recursive: true, force: true });
+// WELLbooked liegt nicht in jeder Umgebung als Klon vor. Fehlt die Quelle,
+// bleiben die bisher erzeugten Seiten stehen, statt gelöscht zu werden.
+const MIT_WELLBOOKED = existsSync(q('wellbooked', 'src', 'app', '(customer)'));
+if (!MIT_WELLBOOKED) console.warn('Hinweis: Quelle wellbooked fehlt – wellbooked/*.html bleiben unverändert.');
+for (const o of ['mahjong', 'swaply', 'fullrep', 'anigosha', 'fixthemix', ...(MIT_WELLBOOKED ? ['wellbooked'] : []), 'watten']) rmSync(path.join(ROOT, o), { recursive: true, force: true });
 
 mahjong();
 swaply();
@@ -254,7 +277,7 @@ await ausDaten({
     { key: 'terms', datei: { de: 'nutzungsbedingungen', en: 'terms' } },
     { key: 'health', datei: { de: 'gesundheit', en: 'health' } },
   ],
-  anker: { de: 'Vercel, Inc.', en: 'Vercel, Inc.' },
+  anker: { de: 'Cloudflare, Inc.', en: 'Cloudflare, Inc.' },
   stand: (doc, lang, neu) => (neu ? (lang === 'de' ? `Stand: ${STAND_DE}` : `Last updated: ${STAND_EN}`) : doc.updated),
 });
 
@@ -274,8 +297,8 @@ await ausDaten({
       { key: 'terms', datei: { de: 'nutzungsbedingungen', en: 'terms' } },
       { key: 'deletion', datei: { de: 'konto-loeschen', en: 'delete-account' } },
     ],
-    anker: { de: 'Vercel:', en: 'Vercel:' },
-    stand: (_doc, lang, neu) => `${lang === 'de' ? 'Stand' : 'Last updated'}: ${neu ? '30.09.2026' : LAST_UPDATED}`,
+    anker: { de: 'Vercel Inc. (USA)', en: 'Vercel Inc. (USA)' },
+    stand: (_doc, lang, neu) => `${lang === 'de' ? 'Stand' : 'Last updated'}: ${neu ? STAND_KURZ : LAST_UPDATED}`,
   });
 }
 
@@ -300,7 +323,7 @@ await ausDaten({
       // Die Erklärung nennt ihren Stand auch im Text; der muss zum Kopf passen.
       if (neu === 'privacy') {
         const alt2 = lang === 'de' ? `Stand dieser Erklärung: ${STAND}.` : `Last updated: ${STAND}.`;
-        const neu2 = lang === 'de' ? 'Stand dieser Erklärung: 30.09.2026.' : 'Last updated: 30.09.2026.';
+        const neu2 = lang === 'de' ? `Stand dieser Erklärung: ${STAND_KURZ}.` : `Last updated: ${STAND_KURZ}.`;
         sections = sections.map((x) => ({ ...x, body: x.body.includes(alt2) ? ersetze(x.body, alt2, neu2, `fixthemix ${lang}`) : x.body }));
         if (!sections.some((x) => x.body.includes(neu2))) throw new Error(`fixthemix ${lang}: Stand im Text nicht gefunden`);
       }
@@ -316,11 +339,11 @@ await ausDaten({
       { key: 'deletion', datei: { de: 'daten-loeschen', en: 'delete-data' } },
     ],
     anker: { de: 'Cloudflare (', en: 'Cloudflare (' },
-    stand: (_doc, lang, neu) => `${lang === 'de' ? 'Stand' : 'Last updated'}: ${neu ? '30.09.2026' : STAND}`,
+    stand: (_doc, lang, neu) => `${lang === 'de' ? 'Stand' : 'Last updated'}: ${neu ? STAND_KURZ : STAND}`,
   });
 }
 
-await wellbooked();
+if (MIT_WELLBOOKED) await wellbooked();
 
 writeFileSync(path.join(ROOT, 'app-ads.txt'), APP_ADS);
 writeFileSync(path.join(ROOT, '.nojekyll'), '');
@@ -330,7 +353,7 @@ rmSync(TMP, { recursive: true, force: true });
 
 const PFLICHT = [
   'index.html', 'app-ads.txt',
-  'mahjong/datenschutz.html', 'mahjong/impressum.html',
+  'mahjong/datenschutz.html', 'mahjong/impressum.html', 'mahjong/nutzungsbedingungen.html',
   'swaply/datenschutz.html', 'swaply/impressum.html',
   'fullrep/datenschutz.html', 'fullrep/privacy.html', 'fullrep/impressum.html', 'fullrep/imprint.html',
   'anigosha/datenschutz.html', 'anigosha/privacy.html', 'anigosha/impressum.html', 'anigosha/imprint.html',
@@ -338,7 +361,7 @@ const PFLICHT = [
   'fixthemix/datenschutz.html', 'fixthemix/privacy.html', 'fixthemix/impressum.html', 'fixthemix/imprint.html',
   'fixthemix/nutzungsbedingungen.html', 'fixthemix/terms.html', 'fixthemix/daten-loeschen.html', 'fixthemix/delete-data.html',
   'wellbooked/datenschutz.html', 'wellbooked/impressum.html', 'wellbooked/agb.html', 'wellbooked/kontakt.html',
-  'watten/datenschutz.html', 'watten/impressum.html', 'watten/support.html',
+  'watten/datenschutz.html', 'watten/impressum.html', 'watten/support.html', 'watten/index.html',
 ];
 const fehler = [];
 for (const f of PFLICHT) if (!existsSync(path.join(ROOT, f))) fehler.push(`fehlt: ${f}`);
