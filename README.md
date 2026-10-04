@@ -27,14 +27,16 @@ Das Skript `werkzeug/erzeugen.mjs` bricht ab, wenn:
 
 | App | Quelle |
 |---|---|
-| Mahjong Royale | `mahjong-app/public/{privacy,impressum}.html` |
+| Mahjong Royale | `mahjong-app/public/{privacy,impressum,terms}.html` |
 | Swaply | `swaply/landing/{datenschutz,impressum}.html` |
 | FullRep | `mypeak/src/pages/legal/legalContent.js` |
 | Anigosha | `anigosha/src/pages/legal/legalContent.ts` |
 | FixTheMix | `fixthemix/src/pages/legal/legalContent.ts` |
 | WELLbooked | `wellbooked/src/app/(customer)/{datenschutz,impressum,agb,kontakt}/page.tsx` |
-| Watten & Schnapsen | `doppeldeutsch/website/{datenschutz,impressum,support}.html` |
+| Watten & Schnapsen | `doppeldeutsch/website/{datenschutz,impressum,support,index}.html` |
 
-Die einzige inhaltliche Änderung: Jede Datenschutzerklärung nennt zusätzlich GitHub als Auslieferer dieser Seiten.
+Die einzige inhaltliche Änderung: Jede Datenschutzerklärung nennt zusätzlich GitHub als Auslieferer dieser Seiten — außer das Original tut es schon selbst (Swaply, Watten seit 04.10.2026).
+
+Fehlt die Quelle `wellbooked` im Ordner `QUELLEN`, bleiben `wellbooked/*.html` unverändert stehen; das Skript meldet das nur als Hinweis.
 
 `app-ads.txt` muss direkt unter der Domain liegen. Nur deshalb heißt das Repo `almaz6380.github.io`. Die Weltgeschichte-App liegt in ihrem eigenen Repo unter `/Geschichte/`.
