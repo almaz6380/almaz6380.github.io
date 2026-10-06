@@ -183,7 +183,7 @@ async function wellbooked() {
       .replace(/href="\/(impressum|datenschutz|agb|kontakt)"/g, 'href="$1.html"')
       .replace(/href="\/fuer-anbieter"/g, 'href="https://www.wellbooked.at/fuer-anbieter"');
     if (s.key === 'datenschutz') {
-      html = ersetze(html, /(<li>Vercel, Inc\. \(USA; Hosting der Web-App[^<]*<\/li>)/, `$1<li>${esc(GITHUB_DE)}</li>`, 'wellbooked');
+      html = ersetze(html, /(<li>Netlify, Inc\. \(USA; Hosting der Web-App[^<]*<\/li>)/, `$1<li>${esc(GITHUB_DE)}</li>`, 'wellbooked');
       html = ersetze(html, /Stand: [^<]+</, `Stand: ${STAND_DE}<`, 'wellbooked');
     }
     if (/href="\/(?!\/)/.test(html)) throw new Error(`wellbooked/${s.key}: absoluter Pfad übrig, der hier ins Leere zeigt`);
