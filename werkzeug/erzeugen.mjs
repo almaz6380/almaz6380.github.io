@@ -56,6 +56,9 @@ function ersetze(text, muster, neu, wo) {
   return text.replace(muster, neu);
 }
 
+// Vergleicht zwei Daten im Format TT.MM.JJJJ und gibt das spätere zurück.
+const spaeter = (a, b) => (a.split('.').reverse().join('') >= b.split('.').reverse().join('') ? a : b);
+
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 // Klartext mit \n → Absätze. E-Mail-Adressen werden anklickbar.
@@ -297,8 +300,11 @@ await ausDaten({
       { key: 'terms', datei: { de: 'nutzungsbedingungen', en: 'terms' } },
       { key: 'deletion', datei: { de: 'konto-loeschen', en: 'delete-account' } },
     ],
-    anker: { de: 'Vercel Inc. (USA)', en: 'Vercel Inc. (USA)' },
-    stand: (_doc, lang, neu) => `${lang === 'de' ? 'Stand' : 'Last updated'}: ${neu ? STAND_KURZ : LAST_UPDATED}`,
+    // Seit dem Umzug am 05.10.2026 liefert Cloudflare statt Vercel die Web-App aus.
+    anker: { de: 'Cloudflare Inc. (USA)', en: 'Cloudflare Inc. (USA)' },
+    // Der jüngere Stand gewinnt: Die GitHub-Ergänzung ist vom 04.10., eine
+    // spätere Änderung am Original (LAST_UPDATED) darf davon nicht verdeckt werden.
+    stand: (_doc, lang, neu) => `${lang === 'de' ? 'Stand' : 'Last updated'}: ${neu ? spaeter(STAND_KURZ, LAST_UPDATED) : LAST_UPDATED}`,
   });
 }
 
