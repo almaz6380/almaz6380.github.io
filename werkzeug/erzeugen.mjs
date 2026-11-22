@@ -329,7 +329,7 @@ await ausDaten({
       // Die Erklärung nennt ihren Stand auch im Text; der muss zum Kopf passen.
       if (neu === 'privacy') {
         const alt2 = lang === 'de' ? `Stand dieser Erklärung: ${STAND}.` : `Last updated: ${STAND}.`;
-        const neu2 = lang === 'de' ? `Stand dieser Erklärung: ${STAND_KURZ}.` : `Last updated: ${STAND_KURZ}.`;
+        const neu2 = lang === 'de' ? `Stand dieser Erklärung: ${spaeter(STAND_KURZ, STAND)}.` : `Last updated: ${spaeter(STAND_KURZ, STAND)}.`;
         sections = sections.map((x) => ({ ...x, body: x.body.includes(alt2) ? ersetze(x.body, alt2, neu2, `fixthemix ${lang}`) : x.body }));
         if (!sections.some((x) => x.body.includes(neu2))) throw new Error(`fixthemix ${lang}: Stand im Text nicht gefunden`);
       }
@@ -345,7 +345,7 @@ await ausDaten({
       { key: 'deletion', datei: { de: 'daten-loeschen', en: 'delete-data' } },
     ],
     anker: { de: 'Cloudflare (', en: 'Cloudflare (' },
-    stand: (_doc, lang, neu) => `${lang === 'de' ? 'Stand' : 'Last updated'}: ${neu ? STAND_KURZ : STAND}`,
+    stand: (_doc, lang, neu) => `${lang === 'de' ? 'Stand' : 'Last updated'}: ${neu ? spaeter(STAND_KURZ, STAND) : STAND}`,
   });
 }
 
